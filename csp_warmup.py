@@ -9,15 +9,15 @@ def start():
     print_title('CSP WARM-UP: start')
 
     print_title('CSP WARM-UP: init square with size 5')
-    square = init_square(10)
+    square = init_square(12)
     print(square)
 
     print_title('CSP WARM-UP: set possible values')
-    possible_values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+    possible_values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
     print(possible_values)
 
     print_title('CSP WARM-UP: fill square non repeatedly')
-    is_filled, square_filled = fill_square_non_repeatedly(square, possible_values, False)
+    is_filled, square_filled = fill_square_non_repeatedly_backtracked(square, possible_values, False)
     print(square_filled)
 
     # print_latin(7)
@@ -31,11 +31,7 @@ def init_square(size):
     return square
 
 
-def backtracking_search():
-    pass
-
-
-def fill_square_non_repeatedly(square, possible_vals, is_recursive):
+def fill_square_non_repeatedly_backtracked(square, possible_vals, is_recursive):
     if len(possible_vals) == 0:
         return True, square
 
@@ -53,32 +49,19 @@ def fill_square_non_repeatedly(square, possible_vals, is_recursive):
                         possible_vals_next = possible_vals.copy()
 
                         possible_vals_next.remove(val)
-                        is_filled, square_part_filled = fill_square_non_repeatedly(square, possible_vals_next, True)
+                        is_filled, square_part_filled = fill_square_non_repeatedly_backtracked(square, possible_vals_next, True)
 
                         if is_filled:
                             break
                     if is_filled:
-                        # print(square_part_filled)
-                        # square[row, col] = val
                         square = square_part_filled
                         if is_recursive:
                             return True, square
                     else:
                         square[row, col] = 0
                         return False, square
-
                 else:
                     return False, square
-
-            # if square[row, col] == 0:
-            #     # print(square[row, col])
-            #     # Create possible values in row and subtract from full set
-            #     possible_vals_in_row = possible_vals - set(square[row])
-            #     # print(possible_vals_in_row)
-            #     # Create possible values in column and subtract
-            #     possible_vals_in_col = possible_vals_in_row - set(square[:, col])
-            #     # print(possible_vals_in_col)
-            #     square[row, col] = possible_vals_in_col.pop()
 
     return False, square
 
@@ -87,31 +70,4 @@ def is_possible_assignment(square, possible_vals, row, col):
     possible_vals_in_row = possible_vals - set(square[row])
     possible_vals_in_row_and_col = possible_vals_in_row - set(square[:, col])
     return bool(possible_vals_in_row_and_col), possible_vals_in_row_and_col
-
-
-
-# # Function to prn x n Latin Square
-# def print_latin(n):
-#     # A variable to control the
-#     # rotation point.
-#     k = n + 1
-#
-#     # Loop to prrows
-#     for i in range(1, n + 1, 1):
-#
-#         # This loops runs only after first
-#         # iteration of outer loop. It prints
-#         # numbers from n to k
-#         temp = k
-#         while temp <= n:
-#             print(temp, end=" ")
-#             temp += 1
-#
-#         # This loop prints numbers
-#         # from 1 to k-1.
-#         for j in range(1, k):
-#             print(j, end=" ")
-#
-#         k -= 1
-#         print()
 
