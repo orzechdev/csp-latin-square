@@ -9,15 +9,15 @@ def start():
     print_title('CSP WARM-UP: start')
 
     print_title('CSP WARM-UP: init square with size 5')
-    square = init_square(5)
+    square = init_square(10)
     print(square)
 
     print_title('CSP WARM-UP: set possible values')
-    possible_values = {1, 2, 3, 4, 5}
+    possible_values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
     print(possible_values)
 
     print_title('CSP WARM-UP: fill square non repeatedly')
-    is_filled, square_filled = fill_square_non_repeatedly(square, possible_values, 0, 0)
+    is_filled, square_filled = fill_square_non_repeatedly(square, possible_values, False)
     print(square_filled)
 
     # print_latin(7)
@@ -35,39 +35,40 @@ def backtracking_search():
     pass
 
 
-def fill_square_non_repeatedly(square, possible_vals, x, y):
+def fill_square_non_repeatedly(square, possible_vals, is_recursive):
     if len(possible_vals) == 0:
         return True, square
 
-    for col in range(y, square.shape[0]):
-        for row in range(x, square.shape[1]):
-            is_possible, possible_vals_in_row_and_col = is_possible_assignment(square, possible_vals, row, col)
-            if is_possible:
-                is_filled = False
-                square_part_filled = square
-                for val in possible_vals_in_row_and_col:
-                    # val = possible_vals_in_row_and_col.pop()
-                    square[row, col] = val
+    for col in range(0, square.shape[0]):
+        for row in range(0, square.shape[1]):
+            if square[row, col] == 0:
+                is_possible, possible_vals_in_row_and_col = is_possible_assignment(square, possible_vals, row, col)
+                if is_possible:
+                    is_filled = False
+                    square_part_filled = square
+                    for val in possible_vals_in_row_and_col:
+                        # val = possible_vals_in_row_and_col.pop()
+                        square[row, col] = val
 
-                    possible_vals_next = possible_vals.copy()
+                        possible_vals_next = possible_vals.copy()
 
-                    possible_vals_next.remove(val)
-                    next_x = (row + 1) % square.shape[1]
-                    next_y = (col + 1) if row % square.shape[1] == 0 else col
-                    is_filled, square_part_filled = fill_square_non_repeatedly(square, possible_vals_next, next_x, next_y)
+                        possible_vals_next.remove(val)
+                        is_filled, square_part_filled = fill_square_non_repeatedly(square, possible_vals_next, True)
 
+                        if is_filled:
+                            break
                     if is_filled:
-                        break
-                if is_filled:
-                    # print(square_part_filled)
-                    # square[row, col] = val
-                    square = square_part_filled
-                    return True, square
-                else:
-                    square[row, col] = 0
+                        # print(square_part_filled)
+                        # square[row, col] = val
+                        square = square_part_filled
+                        if is_recursive:
+                            return True, square
+                    else:
+                        square[row, col] = 0
+                        return False, square
 
-            else:
-                return False, square
+                else:
+                    return False, square
 
             # if square[row, col] == 0:
             #     # print(square[row, col])
