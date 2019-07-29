@@ -16,7 +16,7 @@ with all numbers.
 
 ## How the algorithm works
 
-The program can use either backtracking search algorithm or search with forward checking heuristic.
+The program is an example of constraint satisfaction problem. It can use either backtracking search algorithm or search with forward checking heuristic.
 
 ## Results (with backtracking search)
 
